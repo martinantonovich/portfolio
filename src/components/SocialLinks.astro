@@ -1,0 +1,40 @@
+---
+import { site } from '../data/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class={`flex items-center gap-3 ${className}`}>
+  {
+    site.social.map((link) => (
+      <a
+        href={link.url}
+        target={link.icon === 'email' ? undefined : '_blank'}
+        rel={link.icon === 'email' ? undefined : 'noopener noreferrer'}
+        aria-label={link.label}
+        class="grid size-9 place-items-center rounded-full border border-zinc-300 text-zinc-600 transition-colors hover:border-emerald-500 hover:text-emerald-600 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-emerald-400 dark:hover:text-emerald-400"
+      >
+        {link.icon === 'github' && (
+          <svg viewBox="0 0 24 24" fill="currentColor" class="size-4.5">
+            <path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.5 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.37-3.37-1.37-.46-1.2-1.11-1.52-1.11-1.52-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.72 0 0 .84-.28 2.75 1.05a9.36 9.36 0 0 1 5 0c1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.46.1 2.72.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.81 0 .27.18.6.69.5A10.26 10.26 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z" />
+          </svg>
+        )}
+        {link.icon === 'linkedin' && (
+          <svg viewBox="0 0 24 24" fill="currentColor" class="size-4.5">
+            <path d="M6.94 5.5a1.94 1.94 0 1 1-3.88 0 1.94 1.94 0 0 1 3.88 0ZM3.34 8.75h3.2V21h-3.2V8.75Zm5.75 0h3.07v1.68h.04c.43-.8 1.48-1.65 3.04-1.65 3.25 0 3.85 2.14 3.85 4.92V21h-3.2v-5.72c0-1.37-.03-3.12-1.9-3.12-1.9 0-2.2 1.48-2.2 3.02V21h-3.2V8.75Z" />
+          </svg>
+        )}
+        {link.icon === 'email' && (
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4.5">
+            <rect x="3" y="5" width="18" height="14" rx="2" />
+            <path d="m3 7 9 6 9-6" />
+          </svg>
+        )}
+      </a>
+    ))
+  }
+</div>

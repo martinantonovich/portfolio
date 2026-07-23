@@ -1,0 +1,86 @@
+---
+import { site } from '../data/site';
+import SocialLinks from './SocialLinks.astro';
+---
+
+<section id="contacto" class="mx-auto max-w-3xl px-6 py-20">
+  <div data-reveal class="text-center">
+    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">Contacto</h2>
+    <p class="mt-3 text-zinc-600 dark:text-zinc-400">
+      ¿Tenés un proyecto en mente o una oportunidad para charlar? Escribime.
+    </p>
+
+    <div class="mt-6 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+      <a
+        href={`mailto:${site.email}`}
+        class="rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-500"
+      >
+        {site.email}
+      </a>
+      <SocialLinks />
+    </div>
+  </div>
+
+  <!--
+    No hay backend: este formulario arma un link "mailto:" con los campos
+    completados y lo abre en el cliente de correo del usuario. No envía nada
+    a ningún servidor.
+  -->
+  <form id="contact-form" data-reveal class="mt-12 grid gap-4">
+    <div class="grid gap-4 sm:grid-cols-2">
+      <div>
+        <label for="name" class="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Nombre</label>
+        <input
+          id="name"
+          name="name"
+          type="text"
+          required
+          class="w-full rounded-lg border border-zinc-300 bg-white px-3.5 py-2.5 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-900"
+        />
+      </div>
+      <div>
+        <label for="subject" class="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Asunto</label>
+        <input
+          id="subject"
+          name="subject"
+          type="text"
+          required
+          class="w-full rounded-lg border border-zinc-300 bg-white px-3.5 py-2.5 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-900"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label for="message" class="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">Mensaje</label>
+      <textarea
+        id="message"
+        name="message"
+        rows="5"
+        required
+        class="w-full rounded-lg border border-zinc-300 bg-white px-3.5 py-2.5 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-zinc-700 dark:bg-zinc-900"
+      ></textarea>
+    </div>
+
+    <button
+      type="submit"
+      class="justify-self-start rounded-full bg-zinc-900 px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
+    >
+      Enviar mensaje
+    </button>
+  </form>
+</section>
+
+<script define:vars={{ email: site.email }} is:inline>
+  document.getElementById('contact-form')?.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+    const name = data.get('name')?.toString() ?? '';
+    const subject = data.get('subject')?.toString() ?? '';
+    const message = data.get('message')?.toString() ?? '';
+
+    const body = `${message}\n\n— ${name}`;
+    const mailtoUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
+  });
+</script>

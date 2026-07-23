@@ -1,0 +1,84 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+import { site } from '../data/site';
+
+const navLinks = [
+  { href: '#proyectos', label: 'Proyectos' },
+  { href: '#experiencia', label: 'Experiencia' },
+  { href: '#estudios', label: 'Estudios' },
+  { href: '#contacto', label: 'Contacto' },
+];
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-zinc-200/80 bg-zinc-50/80 backdrop-blur-md dark:border-zinc-800/80 dark:bg-zinc-950/80"
+>
+  <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
+    <a href="#top" class="font-heading text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+      {site.name}
+    </a>
+
+    <nav class="hidden items-center gap-8 md:flex">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class="text-sm font-medium text-zinc-600 transition-colors hover:text-emerald-600 dark:text-zinc-400 dark:hover:text-emerald-400"
+          >
+            {link.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <ThemeToggle />
+      <button
+        id="mobile-menu-toggle"
+        type="button"
+        aria-label="Abrir menú"
+        aria-expanded="false"
+        class="grid size-9 place-items-center rounded-full border border-zinc-300 text-zinc-600 md:hidden dark:border-zinc-700 dark:text-zinc-300"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="size-4.5">
+          <path d="M4 7h16M4 12h16M4 17h16"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <nav
+    id="mobile-menu"
+    class="hidden flex-col gap-1 border-t border-zinc-200 px-6 py-3 md:hidden dark:border-zinc-800"
+  >
+    {
+      navLinks.map((link) => (
+        <a
+          href={link.href}
+          class="rounded-md px-2 py-2.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-900"
+        >
+          {link.label}
+        </a>
+      ))
+    }
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById('mobile-menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+
+  toggle?.addEventListener('click', () => {
+    const isOpen = menu?.classList.toggle('flex');
+    menu?.classList.toggle('hidden', !isOpen);
+    toggle.setAttribute('aria-expanded', String(Boolean(isOpen)));
+  });
+
+  menu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      menu.classList.add('hidden');
+      menu.classList.remove('flex');
+      toggle?.setAttribute('aria-expanded', 'false');
+    });
+  });
+</script>
