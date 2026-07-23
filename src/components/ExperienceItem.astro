@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { experience, isLast } = Astro.props;
-const { company, role, location, startDate, endDate, tags } = experience.data;
+const { company, role, location, startDate, endDate, tags, url } = experience.data;
 const { Content } = await render(experience);
 ---
 
@@ -28,6 +28,19 @@ const { Content } = await render(experience);
     </div>
 
     {location && <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-500">{location}</p>}
+
+    {
+      url && (
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-1 inline-block text-sm font-semibold text-zinc-600 transition-colors hover:text-emerald-600 dark:text-zinc-300 dark:hover:text-emerald-400"
+        >
+          Ver sitio →
+        </a>
+      )
+    }
 
     <div class="prose prose-zinc prose-sm mt-3 max-w-none text-zinc-600 marker:text-emerald-500 dark:prose-invert dark:text-zinc-400">
       <Content />

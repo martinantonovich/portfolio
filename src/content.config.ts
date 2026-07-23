@@ -1,5 +1,6 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 // Proyectos: la tarjeta que se muestra en la sección "Proyectos".
 const projects = defineCollection({
@@ -9,8 +10,8 @@ const projects = defineCollection({
     description: z.string(),
     tags: z.array(z.string()).default([]),
     image: z.string().optional(),
-    repoUrl: z.string().url().optional(),
-    demoUrl: z.string().url().optional(),
+    repoUrl: z.url().optional(),
+    demoUrl: z.url().optional(),
     // Los proyectos destacados aparecen primero en el grid.
     featured: z.boolean().default(false),
     // Fecha aproximada (YYYY-MM) usada solo para ordenar, no se muestra.
@@ -30,6 +31,8 @@ const experience = defineCollection({
     // Si se omite, se interpreta como "trabajo actual" y se muestra "Presente".
     endDate: z.string().optional(),
     tags: z.array(z.string()).default([]),
+    // Sitio en vivo del proyecto/empresa, si lo tiene (ej: escribaniasureda.com.ar).
+    url: z.url().optional(),
   }),
 });
 
@@ -42,7 +45,7 @@ const education = defineCollection({
     type: z.enum(['formacion', 'curso', 'certificacion']),
     startDate: z.string(),
     endDate: z.string().optional(),
-    credentialUrl: z.string().url().optional(),
+    credentialUrl: z.url().optional(),
   }),
 });
 

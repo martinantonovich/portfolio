@@ -5,7 +5,10 @@
     <line x1="0" y1="120" x2="400" y2="120"/>
     <line x1="0" y1="180" x2="400" y2="180"/>
   </g>
-  <circle cx="140" cy="120" r="28" fill="none" stroke="#34d399" stroke-width="3"/>
-  <circle cx="260" cy="120" r="28" fill="none" stroke="#34d399" stroke-width="3"/>
-  <path d="M168 120h64" stroke="#34d399" stroke-width="3" stroke-dasharray="6 6"/>
+  <g fill="#34d399">
+    <ellipse cx="200" cy="140" rx="26" ry="22"/>
+    <ellipse cx="165" cy="105" rx="12" ry="15"/>
+    <ellipse cx="195" cy="90" rx="12" ry="15"/>
+    <ellipse cx="235" cy="105" rx="12" ry="15"/>
+  </g>
 </svg>

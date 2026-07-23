@@ -1,30 +1,26 @@
-// Datos únicos del sitio. Editá este archivo con tu información real.
-// No es una content collection porque hay un solo "registro": vos.
-
 export interface SocialLink {
   label: string;
   url: string;
-  // Nombre de ícono usado en Contact.astro / Hero.astro (ver el switch en esos componentes).
   icon: 'github' | 'linkedin' | 'email';
 }
 
 export const site = {
-  name: 'Tu Nombre',
-  role: 'Desarrollador/a de Software',
+  name: 'Martin Antonovich',
+  role: 'Desarrollador Full Stack',
   tagline:
-    'Construyo APIs, integraciones y automatizaciones que hacen que los sistemas se hablen entre sí sin fricción.',
-  bio: `Soy desarrollador/a de software con foco en backend, integración de APIs y automatización
-de procesos. Me interesa simplificar sistemas complejos y eliminar trabajo manual repetitivo
-con soluciones prolijas y mantenibles. Estas últimas experiencias resumen en qué estuve
-trabajando — el detalle completo está en la sección de proyectos.`,
-  location: 'Buenos Aires, Argentina',
-  email: 'tu-email@ejemplo.com',
-  avatar: '/images/avatar.svg',
-  // PDF opcional de tu CV. Poné el archivo en /public y actualizá la ruta, o dejalo en null.
-  resumeUrl: null as string | null,
+    'Desarrollo software full stack e integro IA y automatización para simplificar sistemas complejos.',
+  bio: `Soy desarrollador full stack con foco en arquitecturas frontend e integración de inteligencia
+artificial. Me apasiona construir interfaces de usuario responsivas, diseñar bases de datos
+robustas, y explorar constantemente tecnologías emergentes como LLMs y gemelos digitales
+(Digital Twins). Me adapto bien a equipos colaborativos, pero también tengo la autonomía para
+liderar proyectos complejos de punta a punta: desde la arquitectura de sistemas hasta el despliegue.`,
+  location: 'La Plata, Buenos Aires, Argentina',
+  email: 'mailto:martin.antonovich@gmail.com',
+  avatar: '/images/foto_perfil.png',
+  resumeUrl: '/cv/CV_Martin_Antonovich_resume.pdf' as string | null,
   social: [
-    { label: 'GitHub', url: 'https://github.com/tu-usuario', icon: 'github' },
-    { label: 'LinkedIn', url: 'https://linkedin.com/in/tu-usuario', icon: 'linkedin' },
-    { label: 'Email', url: 'mailto:tu-email@ejemplo.com', icon: 'email' },
+    { label: 'GitHub', url: 'https://github.com/martinantonovich', icon: 'github' },
+    { label: 'LinkedIn', url: 'https://www.linkedin.com/in/martin-antonovich-1a4077169/', icon: 'linkedin' },
+    { label: 'Email', url: 'mailto:martin.antonovich@gmail.com', icon: 'email' },
   ] satisfies SocialLink[],
 };
