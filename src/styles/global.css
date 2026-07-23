@@ -56,3 +56,47 @@
     }
   }
 }
+
+/* Vista de impresión (usada por el botón "Descargar / Imprimir PDF" de /cv,
+   pero se aplica a cualquier página que se imprima). Fuerza colores legibles
+   sin importar el tema activo y oculta lo que no tiene sentido en papel. */
+@media print {
+  .no-print,
+  header,
+  footer {
+    display: none !important;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+  }
+
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  li,
+  dt,
+  dd,
+  span,
+  a {
+    color: #18181b !important;
+    text-shadow: none !important;
+  }
+
+  a {
+    text-decoration: none !important;
+  }
+
+  main {
+    max-width: none !important;
+  }
+
+  /* Evita que una experiencia/estudio se corte entre dos hojas. */
+  .cv-block {
+    break-inside: avoid;
+  }
+}

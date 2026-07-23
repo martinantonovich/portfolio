@@ -1,0 +1,147 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection, render } from 'astro:content';
+import { site } from '../data/site';
+import { skillCategories, languages } from '../data/skills';
+import { formatDateRange } from '../lib/date';
+
+// Esta página reusa las mismas content collections que el home (Experiencia
+// y Estudios): agregar/editar un archivo en src/content/ actualiza las dos
+// vistas a la vez. Para actualizar Skills/Idiomas, editá src/data/skills.ts.
+const experience = (await getCollection('experience')).sort((a, b) =>
+  b.data.startDate.localeCompare(a.data.startDate)
+);
+const education = (await getCollection('education')).sort((a, b) =>
+  b.data.startDate.localeCompare(a.data.startDate)
+);
+
+const experienceWithContent = await Promise.all(
+  experience.map(async (entry) => ({ entry, Content: (await render(entry)).Content }))
+);
+---
+
+<BaseLayout title={`CV — ${site.name}`} description={`Currículum de ${site.name}, ${site.role}.`}>
+  <div class="mx-auto max-w-3xl px-6 py-16">
+    <div class="no-print mb-8 flex justify-end">
+      <button
+        id="print-cv"
+        type="button"
+        class="rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-500"
+      >
+        Descargar / Imprimir PDF
+      </button>
+    </div>
+
+    <!-- Encabezado -->
+    <div class="cv-block mb-10 border-b border-zinc-200 pb-8 dark:border-zinc-800">
+      <h1 class="font-heading text-3xl font-bold">{site.name}</h1>
+      <p class="mt-1 text-lg text-emerald-600 dark:text-emerald-400">{site.role}</p>
+      <p class="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
+        {site.location} · <a href={`mailto:${site.email.replace('mailto:', '')}`} class="hover:text-emerald-600 dark:hover:text-emerald-400">{site.email.replace('mailto:', '')}</a>
+        {
+          site.social
+            .filter((s) => s.icon !== 'email')
+            .map((s) => (
+              <>
+                {' '}
+                ·{' '}
+                <a href={s.url} target="_blank" rel="noopener noreferrer" class="hover:text-emerald-600 dark:hover:text-emerald-400">
+                  {s.label}
+                </a>
+              </>
+            ))
+        }
+      </p>
+      {
+        site.resumeUrl && (
+          <a href={site.resumeUrl} class="no-print mt-3 inline-block text-sm text-zinc-500 underline decoration-zinc-300 hover:text-emerald-600 dark:text-zinc-400 dark:decoration-zinc-700">
+            Descargar el PDF original →
+          </a>
+        )
+      }
+    </div>
+
+    <!-- Sobre mí -->
+    <section class="cv-block mb-10">
+      <h2 class="font-heading text-xl font-semibold text-zinc-900 dark:text-zinc-50">Sobre mí</h2>
+      <p class="mt-3 whitespace-pre-line text-sm text-zinc-600 dark:text-zinc-400">{site.bio}</p>
+    </section>
+
+    <!-- Habilidades -->
+    <section class="cv-block mb-10">
+      <h2 class="font-heading text-xl font-semibold text-zinc-900 dark:text-zinc-50">Habilidades</h2>
+      <dl class="mt-4 space-y-3">
+        {
+          skillCategories.map((group) => (
+            <div class="grid grid-cols-1 gap-1 sm:grid-cols-[9rem_1fr] sm:gap-3">
+              <dt class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">{group.category}</dt>
+              <dd class="text-sm text-zinc-600 dark:text-zinc-400">{group.items.join(', ')}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <!-- Experiencia -->
+    <section class="cv-block mb-10">
+      <h2 class="font-heading text-xl font-semibold text-zinc-900 dark:text-zinc-50">Experiencia</h2>
+      <div class="mt-4 space-y-6">
+        {
+          experienceWithContent.map(({ entry, Content }) => (
+            <div class="cv-block">
+              <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
+                <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+                  {entry.data.role} · {entry.data.company}
+                </h3>
+                <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                  {formatDateRange(entry.data.startDate, entry.data.endDate)}
+                </span>
+              </div>
+              <div class="prose prose-zinc prose-sm mt-1 max-w-none text-zinc-600 marker:text-emerald-500 dark:prose-invert dark:text-zinc-400">
+                <Content />
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Estudios -->
+    <section class="cv-block mb-10">
+      <h2 class="font-heading text-xl font-semibold text-zinc-900 dark:text-zinc-50">Estudios</h2>
+      <div class="mt-4 space-y-3">
+        {
+          education.map((entry) => (
+            <div class="cv-block flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
+              <div>
+                <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">{entry.data.title}</h3>
+                <p class="text-xs text-zinc-500 dark:text-zinc-500">{entry.data.institution}</p>
+              </div>
+              <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                {formatDateRange(entry.data.startDate, entry.data.endDate)}
+              </span>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Idiomas -->
+    <section class="cv-block">
+      <h2 class="font-heading text-xl font-semibold text-zinc-900 dark:text-zinc-50">Idiomas</h2>
+      <ul class="mt-4 space-y-1">
+        {
+          languages.map((lang) => (
+            <li class="text-sm text-zinc-600 dark:text-zinc-400">
+              <span class="font-semibold text-zinc-800 dark:text-zinc-200">{lang.name}:</span> {lang.level}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  document.getElementById('print-cv')?.addEventListener('click', () => window.print());
+</script>

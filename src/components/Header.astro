@@ -2,19 +2,25 @@
 import ThemeToggle from './ThemeToggle.astro';
 import { site } from '../data/site';
 
-const navLinks = [
+// Las anclas (#proyectos, etc.) solo funcionan sin recargar en la home.
+// Si estamos en otra página (ej: /cv), hay que anteponer "/" para que
+// primero navegue de vuelta a la home y después salte a la sección.
+const isHome = Astro.url.pathname === '/';
+const sectionLinks = [
   { href: '#proyectos', label: 'Proyectos' },
   { href: '#experiencia', label: 'Experiencia' },
   { href: '#estudios', label: 'Estudios' },
   { href: '#contacto', label: 'Contacto' },
-];
+].map((link) => (isHome ? link : { ...link, href: `/${link.href}` }));
+
+const navLinks = [...sectionLinks, { href: '/cv', label: 'CV' }];
 ---
 
 <header
   class="sticky top-0 z-50 border-b border-zinc-200/80 bg-zinc-50/80 backdrop-blur-md dark:border-zinc-800/80 dark:bg-zinc-950/80"
 >
   <div class="mx-auto flex max-w-5xl items-center justify-between px-6 py-4">
-    <a href="#top" class="font-heading text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+    <a href={isHome ? '#top' : '/'} class="font-heading text-lg font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
       {site.name}
     </a>
 

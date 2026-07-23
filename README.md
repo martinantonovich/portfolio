@@ -60,11 +60,13 @@ componente**.
 
 1. Copiá un archivo de `src/content/experience/`.
 2. Completá el frontmatter (`company`, `role`, `location`, `startDate`, `endDate`,
-   `tags`). Si el puesto es el actual, **no pongas `endDate`** — el sitio muestra
-   automáticamente "Presente".
+   `tags`, `url`). Si el puesto es el actual, **no pongas `endDate`** — el sitio
+   muestra automáticamente "Presente". `url` es opcional y sirve para linkear un
+   sitio en vivo (aparece como "Ver sitio →").
 3. El cuerpo del Markdown son los bullets de responsabilidades/logros (una línea
-   por bullet, con `- `). Se renderiza tal cual en la timeline.
-4. Se ordena automáticamente por `startDate` (más reciente primero).
+   por bullet, con `- `). Se renderiza tal cual en la timeline y en `/cv`.
+4. Se ordena automáticamente por `startDate` (más reciente primero). Este mismo
+   contenido se reusa en la página `/cv` — no hay que cargarlo dos veces.
 
 ### Agregar un estudio, curso o certificación
 
@@ -81,10 +83,30 @@ Todo lo que no es una lista (nombre, rol, bio, avatar, email, redes) vive en
 
 - `avatar`: poné tu foto en `public/images/` y actualizá la ruta (reemplaza el
   placeholder `public/images/avatar.svg`).
-- `resumeUrl`: si querés un botón de "Descargar CV", subí el PDF a `public/` y
-  poné la ruta ahí (por ejemplo `/cv.pdf`); si lo dejás en `null`, el botón no
-  se muestra.
+- `resumeUrl`: opcional. Si subís un PDF de CV a `public/cv/` y poné la ruta acá,
+  aparece un link secundario "Descargar el PDF original" en `/cv`. Si lo dejás en
+  `null`, no se muestra — no hace falta, porque `/cv` genera un PDF actualizado al
+  vuelo (ver siguiente sección).
 - `social`: array de links a tus redes (GitHub, LinkedIn, email).
+
+### La página /cv (currículum imprimible)
+
+Además de las secciones del home, el sitio tiene una página dedicada en `/cv` que
+arma un currículum de una sola columna, pensado para imprimirse o guardarse como
+PDF. Reusa el mismo contenido que el resto del sitio, así que no hay que
+mantenerlo por separado:
+
+- **Experiencia y Estudios**: los mismos archivos de `src/content/`.
+- **Sobre mí**: el `bio` de `src/data/site.ts`.
+- **Habilidades e Idiomas**: viven en `src/data/skills.ts` — es una lista simple de
+  categorías (`skillCategories`) e idiomas (`languages`), editala directamente
+  para agregar algo nuevo que vayas aprendiendo.
+
+El botón **"Descargar / Imprimir PDF"** de esa página dispara el diálogo nativo de
+impresión del navegador (`window.print()`), con una hoja de estilos en
+`global.css` (`@media print`) que oculta el nav/footer y fuerza colores legibles
+en papel sin importar el tema activo. No genera un archivo en el servidor: cada
+visita arma el PDF al momento con el contenido actual.
 
 ### Cambiar colores y fuentes
 
@@ -135,7 +157,8 @@ src/
 │   ├── experience/        # Un .md por experiencia laboral
 │   └── education/          # Un .md por estudio/curso/certificación
 ├── data/
-│   └── site.ts             # Datos únicos: nombre, bio, avatar, redes, email
+│   ├── site.ts             # Datos únicos: nombre, bio, avatar, redes, email
+│   └── skills.ts            # Skills técnicos e idiomas (usados en /cv)
 ├── components/              # Un componente por sección + piezas reutilizables
 ├── layouts/
 │   └── BaseLayout.astro    # <head>, fuentes, tema, Header/Footer
@@ -144,7 +167,8 @@ src/
 ├── scripts/
 │   └── reveal.ts             # Animación de scroll-reveal (IntersectionObserver)
 ├── styles/
-│   └── global.css             # Tailwind, tema, tipografía
+│   └── global.css             # Tailwind, tema, tipografía, estilos de impresión
 └── pages/
-    └── index.astro              # Compone todas las secciones
+    ├── index.astro              # Compone todas las secciones del home
+    └── cv.astro                  # Currículum imprimible en /cv
 ```

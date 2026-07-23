@@ -26,18 +26,12 @@ import SocialLinks from './SocialLinks.astro';
       >
         Contactarme
       </a>
-      {
-        site.resumeUrl && (
-          <a
-            href={site.resumeUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="text-sm font-semibold text-zinc-500 underline decoration-zinc-300 underline-offset-4 hover:text-emerald-600 dark:text-zinc-400 dark:decoration-zinc-700"
-          >
-            Descargar CV
-          </a>
-        )
-      }
+      <a
+        href="/cv"
+        class="text-sm font-semibold text-zinc-500 underline decoration-zinc-300 underline-offset-4 hover:text-emerald-600 dark:text-zinc-400 dark:decoration-zinc-700"
+      >
+        Ver CV
+      </a>
     </div>
 
     <SocialLinks class="mt-8 justify-center md:justify-start" />
