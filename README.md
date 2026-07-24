@@ -42,16 +42,19 @@ componente**.
 2. Renombralo (el nombre del archivo no se muestra, pero conviene que sea descriptivo).
 3. Completá el frontmatter:
 
-   | Campo         | Obligatorio | Descripción                                              |
-   | ------------- | ----------- | --------------------------------------------------------- |
-   | `title`       | sí          | Título del proyecto                                        |
-   | `description` | sí          | Descripción corta que aparece en la tarjeta                |
-   | `tags`        | no          | Lista de tecnologías usadas (`["Node.js", "PostgreSQL"]`)   |
-   | `image`       | no          | Ruta a una imagen en `public/` (ej: `/images/projects/foo.svg`) |
-   | `repoUrl`     | no          | Link al repositorio                                         |
-   | `demoUrl`     | no          | Link a una demo en vivo                                     |
-   | `featured`    | no          | `true` para destacarlo y que aparezca primero               |
-   | `date`        | no          | Formato `YYYY-MM`, solo se usa para ordenar                  |
+   | Campo           | Obligatorio | Descripción                                              |
+   | --------------- | ----------- | --------------------------------------------------------- |
+   | `title`         | sí          | Título del proyecto                                        |
+   | `titleEn`       | no          | Traducción al inglés (si se omite, se usa `title` en los dos idiomas) |
+   | `description`   | sí          | Descripción corta que aparece en la tarjeta                |
+   | `descriptionEn` | no          | Traducción al inglés                                       |
+   | `tags`          | no          | Lista de tecnologías usadas (`["Node.js", "PostgreSQL"]`)   |
+   | `tagsEn`        | no          | Traducción de los tags (mismo orden que `tags`)             |
+   | `image`         | no          | Ruta a una imagen en `public/` (ej: `/images/projects/foo.svg`) |
+   | `repoUrl`       | no          | Link al repositorio                                         |
+   | `demoUrl`       | no          | Link a una demo en vivo                                     |
+   | `featured`      | no          | `true` para destacarlo y que aparezca primero               |
+   | `date`          | no          | Formato `YYYY-MM`, solo se usa para ordenar                  |
 
 4. El cuerpo del Markdown (debajo del frontmatter) no se muestra en la tarjeta
    actualmente — queda ahí como notas propias o para una futura página de detalle.
@@ -59,22 +62,25 @@ componente**.
 ### Agregar una experiencia laboral nueva
 
 1. Copiá un archivo de `src/content/experience/`.
-2. Completá el frontmatter (`company`, `role`, `location`, `startDate`, `endDate`,
-   `tags`, `url`). Si el puesto es el actual, **no pongas `endDate`** — el sitio
-   muestra automáticamente "Presente". `url` es opcional y sirve para linkear un
-   sitio en vivo (aparece como "Ver sitio →").
-3. El cuerpo del Markdown son los bullets de responsabilidades/logros (una línea
-   por bullet, con `- `). Se renderiza tal cual en la timeline y en `/cv`.
+2. Completá el frontmatter: `company`, `role`, `location`, `startDate`, `endDate`,
+   `tags`, `url`, y **`bullets`** (array de strings con los logros/responsabilidades
+   — reemplaza al cuerpo Markdown). Si el puesto es el actual, **no pongas
+   `endDate`** — el sitio muestra automáticamente "Presente"/"Present". `url` es
+   opcional y sirve para linkear un sitio en vivo (aparece como "Ver sitio →").
+3. Para la versión en inglés, agregá `roleEn`, `companyEn`, `locationEn`, `tagsEn`
+   y `bulletsEn` (todos opcionales — si falta alguno, se repite el valor en
+   español en las dos versiones).
 4. Se ordena automáticamente por `startDate` (más reciente primero). Este mismo
    contenido se reusa en la página `/cv` — no hay que cargarlo dos veces.
 
 ### Agregar un estudio, curso o certificación
 
 1. Copiá un archivo de `src/content/education/`.
-2. Completá el frontmatter (`institution`, `title`, `type`, `startDate`, `endDate`,
-   `credentialUrl`). `type` tiene que ser uno de: `formacion`, `curso`,
-   `certificacion`.
-3. El cuerpo del Markdown es una descripción opcional.
+2. Completá el frontmatter: `institution`, `title`, `type`, `startDate`, `endDate`,
+   `credentialUrl`, `description` (opcional). `type` tiene que ser uno de:
+   `formacion`, `curso`, `certificacion`.
+3. Para inglés, agregá `institutionEn`, `titleEn`, `descriptionEn` (opcionales,
+   con el mismo fallback que en proyectos/experiencia).
 
 ### Editar tus datos personales
 
@@ -100,13 +106,30 @@ mantenerlo por separado:
 - **Sobre mí**: el `bio` de `src/data/site.ts`.
 - **Habilidades e Idiomas**: viven en `src/data/skills.ts` — es una lista simple de
   categorías (`skillCategories`) e idiomas (`languages`), editala directamente
-  para agregar algo nuevo que vayas aprendiendo.
+  para agregar algo nuevo que vayas aprendiendo. Cada entrada tiene su versión en
+  inglés (`categoryEn`, `itemsEn`, `nameEn`, `levelEn`); si la omitís, se repite
+  el valor en español.
 
 El botón **"Descargar / Imprimir PDF"** de esa página dispara el diálogo nativo de
 impresión del navegador (`window.print()`), con una hoja de estilos en
 `global.css` (`@media print`) que oculta el nav/footer y fuerza colores legibles
 en papel sin importar el tema activo. No genera un archivo en el servidor: cada
 visita arma el PDF al momento con el contenido actual.
+
+### Idioma del sitio (ES/EN)
+
+El sitio tiene un botón **ES/EN** en el header que cambia el idioma al instante,
+sin recargar la página. Técnicamente funciona igual que el toggle de tema
+claro/oscuro: ambos idiomas se renderizan siempre en el HTML (componente
+`src/components/I18nText.astro`) y se muestra uno solo vía CSS con un
+`@custom-variant en` definido en `global.css`, activado por un atributo
+`data-lang="en"` en `<html>` que se guarda en `localStorage`.
+
+Para que un texto sea bilingüe, tiene que pasar por `<I18nText es="..." en="..." />`
+en vez de escribirse directo. Si estás agregando contenido nuevo (un proyecto, una
+experiencia, un estudio, un skill), completá los campos `*En` correspondientes
+como se explica en las secciones de arriba — si los dejás vacíos, se usa el texto
+en español también en inglés en vez de romper la build.
 
 ### Cambiar colores y fuentes
 

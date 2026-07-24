@@ -1,14 +1,21 @@
 ---
 import { site } from '../data/site';
+import I18nText from './I18nText.astro';
 
 const year = new Date().getFullYear();
+const isHome = Astro.url.pathname === '/';
 ---
 
 <footer class="border-t border-zinc-200 dark:border-zinc-800">
   <div
     class="mx-auto flex max-w-5xl flex-col items-center gap-2 px-6 py-8 text-sm text-zinc-500 sm:flex-row sm:justify-between dark:text-zinc-500"
   >
-    <p>&copy; {year} {site.name}. Hecho con Astro y Tailwind CSS.</p>
-    <a href="#top" class="transition-colors hover:text-emerald-600 dark:hover:text-emerald-400">Volver arriba ↑</a>
+    <p>
+      &copy; {year} {site.name}.{' '}
+      <I18nText es="Hecho con Astro y Tailwind CSS." en="Built with Astro and Tailwind CSS." />
+    </p>
+    <a href={isHome ? '#top' : '/'} class="transition-colors hover:text-emerald-600 dark:hover:text-emerald-400">
+      <I18nText es="Volver arriba ↑" en="Back to top ↑" />
+    </a>
   </div>
 </footer>

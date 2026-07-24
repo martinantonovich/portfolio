@@ -1,0 +1,29 @@
+---
+// Toggle ES/EN. La inicialización (evitar flash del idioma incorrecto) vive
+// en BaseLayout.astro como script inline en el <head>, igual que el tema.
+---
+
+<button
+  id="lang-toggle"
+  type="button"
+  aria-label="Cambiar idioma / Switch language"
+  class="flex h-9 items-center gap-1 rounded-full border border-zinc-300 px-3 text-xs font-semibold text-zinc-600 transition-colors hover:border-emerald-500 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-emerald-400"
+>
+  <span class="text-emerald-600 en:font-normal en:text-zinc-400 dark:text-emerald-400 dark:en:text-zinc-500">ES</span>
+  <span class="text-zinc-400 en:font-semibold en:text-emerald-600 dark:text-zinc-500 dark:en:text-emerald-400">EN</span>
+</button>
+
+<script>
+  const STORAGE_KEY = 'lang';
+
+  function applyLang(lang: 'es' | 'en') {
+    document.documentElement.setAttribute('data-lang', lang);
+    document.documentElement.lang = lang;
+    localStorage.setItem(STORAGE_KEY, lang);
+  }
+
+  document.getElementById('lang-toggle')?.addEventListener('click', () => {
+    const isEn = document.documentElement.getAttribute('data-lang') === 'en';
+    applyLang(isEn ? 'es' : 'en');
+  });
+</script>

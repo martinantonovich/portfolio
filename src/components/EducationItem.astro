@@ -1,20 +1,32 @@
 ---
 import type { CollectionEntry } from 'astro:content';
-import { render } from 'astro:content';
 import { formatDateRange } from '../lib/date';
+import I18nText from './I18nText.astro';
 
 interface Props {
   education: CollectionEntry<'education'>;
 }
 
 const { education } = Astro.props;
-const { institution, title, type, startDate, endDate, credentialUrl } = education.data;
-const { Content } = await render(education);
+const {
+  institution,
+  institutionEn,
+  title,
+  titleEn,
+  type,
+  startDate,
+  endDate,
+  credentialUrl,
+  description,
+  descriptionEn,
+} = education.data;
 
-const typeLabel: Record<typeof type, string> = {
-  formacion: 'Formación académica',
-  curso: 'Curso',
-  certificacion: 'Certificación',
+const dateRange = formatDateRange(startDate, endDate);
+
+const typeLabel: Record<typeof type, { es: string; en: string }> = {
+  formacion: { es: 'Formación académica', en: 'Academic degree' },
+  curso: { es: 'Curso', en: 'Course' },
+  certificacion: { es: 'Certificación', en: 'Certification' },
 };
 ---
 
@@ -23,16 +35,26 @@ const typeLabel: Record<typeof type, string> = {
   class="rounded-2xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900"
 >
   <span class="text-xs font-semibold tracking-wide text-emerald-600 uppercase dark:text-emerald-400">
-    {typeLabel[type]}
+    <I18nText es={typeLabel[type].es} en={typeLabel[type].en} />
   </span>
 
-  <h3 class="mt-1.5 font-heading text-lg font-semibold">{title}</h3>
-  <p class="text-sm text-zinc-500 dark:text-zinc-500">{institution}</p>
-  <p class="mt-1 text-sm font-medium text-zinc-600 dark:text-zinc-400">{formatDateRange(startDate, endDate)}</p>
+  <h3 class="mt-1.5 font-heading text-lg font-semibold">
+    <I18nText es={title} en={titleEn ?? title} />
+  </h3>
+  <p class="text-sm text-zinc-500 dark:text-zinc-500">
+    <I18nText es={institution} en={institutionEn ?? institution} />
+  </p>
+  <p class="mt-1 text-sm font-medium text-zinc-600 dark:text-zinc-400">
+    <I18nText es={dateRange.es} en={dateRange.en} />
+  </p>
 
-  <div class="prose prose-zinc prose-sm mt-3 max-w-none text-zinc-600 dark:prose-invert dark:text-zinc-400">
-    <Content />
-  </div>
+  {
+    description && (
+      <p class="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
+        <I18nText es={description} en={descriptionEn ?? description} />
+      </p>
+    )
+  }
 
   {
     credentialUrl && (
@@ -42,7 +64,7 @@ const typeLabel: Record<typeof type, string> = {
         rel="noopener noreferrer"
         class="mt-3 inline-block text-sm font-semibold text-zinc-600 transition-colors hover:text-emerald-600 dark:text-zinc-300 dark:hover:text-emerald-400"
       >
-        Ver credencial →
+        <I18nText es="Ver credencial →" en="View credential →" />
       </a>
     )
   }

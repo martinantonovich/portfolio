@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import EducationItem from './EducationItem.astro';
+import I18nText from './I18nText.astro';
 
 // Para agregar un estudio/curso/certificación nuevo: copiá un archivo de
 // src/content/education/*.md y completá el frontmatter.
@@ -11,8 +12,12 @@ const education = allEducation.sort((a, b) => b.data.startDate.localeCompare(a.d
 <section id="estudios" class="bg-zinc-100/60 py-20 dark:bg-zinc-900/40">
   <div class="mx-auto max-w-5xl px-6">
     <div data-reveal class="mb-12 text-center">
-      <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">Estudios</h2>
-      <p class="mt-3 text-zinc-600 dark:text-zinc-400">Formación, cursos y certificaciones.</p>
+      <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
+        <I18nText es="Estudios" en="Education" />
+      </h2>
+      <p class="mt-3 text-zinc-600 dark:text-zinc-400">
+        <I18nText es="Formación, cursos y certificaciones." en="Education, courses, and certifications." />
+      </p>
     </div>
 
     <div class="grid gap-5 sm:grid-cols-2">

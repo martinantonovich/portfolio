@@ -1,12 +1,13 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import I18nText from './I18nText.astro';
 
 interface Props {
   project: CollectionEntry<'projects'>;
 }
 
 const { project } = Astro.props;
-const { title, description, tags, image, repoUrl, demoUrl, featured } = project.data;
+const { title, titleEn, description, descriptionEn, tags, tagsEn, image, repoUrl, demoUrl, featured } = project.data;
 ---
 
 <article
@@ -27,21 +28,25 @@ const { title, description, tags, image, repoUrl, demoUrl, featured } = project.
 
   <div class="flex flex-1 flex-col gap-3 p-6">
     <div class="flex items-center gap-2">
-      <h3 class="font-heading text-lg font-semibold">{title}</h3>
+      <h3 class="font-heading text-lg font-semibold">
+        <I18nText es={title} en={titleEn ?? title} />
+      </h3>
       {featured && (
         <span class="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-400">
-          Destacado
+          <I18nText es="Destacado" en="Featured" />
         </span>
       )}
     </div>
 
-    <p class="flex-1 text-sm text-zinc-600 dark:text-zinc-400">{description}</p>
+    <p class="flex-1 text-sm text-zinc-600 dark:text-zinc-400">
+      <I18nText es={description} en={descriptionEn ?? description} />
+    </p>
 
     <ul class="flex flex-wrap gap-2">
       {
-        tags.map((tag) => (
+        tags.map((tag, i) => (
           <li class="rounded-full bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-300">
-            {tag}
+            <I18nText es={tag} en={tagsEn?.[i] ?? tag} />
           </li>
         ))
       }

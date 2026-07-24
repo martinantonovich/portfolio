@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import ExperienceItem from './ExperienceItem.astro';
+import I18nText from './I18nText.astro';
 
 // Para agregar una experiencia nueva: copiá un archivo de src/content/experience/*.md
 // y completá el frontmatter. Se ordena automáticamente por fecha de inicio (más reciente primero).
@@ -10,8 +11,12 @@ const experiences = allExperience.sort((a, b) => b.data.startDate.localeCompare(
 
 <section id="experiencia" class="mx-auto max-w-3xl px-6 py-20">
   <div data-reveal class="mb-12 text-center">
-    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">Experiencia</h2>
-    <p class="mt-3 text-zinc-600 dark:text-zinc-400">Mi recorrido profesional hasta ahora.</p>
+    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
+      <I18nText es="Experiencia" en="Experience" />
+    </h2>
+    <p class="mt-3 text-zinc-600 dark:text-zinc-400">
+      <I18nText es="Mi recorrido profesional hasta ahora." en="My professional journey so far." />
+    </p>
   </div>
 
   <div>

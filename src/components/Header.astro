@@ -1,5 +1,7 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+import LanguageToggle from './LanguageToggle.astro';
+import I18nText from './I18nText.astro';
 import { site } from '../data/site';
 
 // Las anclas (#proyectos, etc.) solo funcionan sin recargar en la home.
@@ -7,13 +9,13 @@ import { site } from '../data/site';
 // primero navegue de vuelta a la home y después salte a la sección.
 const isHome = Astro.url.pathname === '/';
 const sectionLinks = [
-  { href: '#proyectos', label: 'Proyectos' },
-  { href: '#experiencia', label: 'Experiencia' },
-  { href: '#estudios', label: 'Estudios' },
-  { href: '#contacto', label: 'Contacto' },
+  { href: '#proyectos', es: 'Proyectos', en: 'Projects' },
+  { href: '#experiencia', es: 'Experiencia', en: 'Experience' },
+  { href: '#estudios', es: 'Estudios', en: 'Education' },
+  { href: '#contacto', es: 'Contacto', en: 'Contact' },
 ].map((link) => (isHome ? link : { ...link, href: `/${link.href}` }));
 
-const navLinks = [...sectionLinks, { href: '/cv', label: 'CV' }];
+const navLinks = [...sectionLinks, { href: '/cv', es: 'CV', en: 'CV' }];
 ---
 
 <header
@@ -31,13 +33,14 @@ const navLinks = [...sectionLinks, { href: '/cv', label: 'CV' }];
             href={link.href}
             class="text-sm font-medium text-zinc-600 transition-colors hover:text-emerald-600 dark:text-zinc-400 dark:hover:text-emerald-400"
           >
-            {link.label}
+            <I18nText es={link.es} en={link.en} />
           </a>
         ))
       }
     </nav>
 
     <div class="flex items-center gap-3">
+      <LanguageToggle />
       <ThemeToggle />
       <button
         id="mobile-menu-toggle"
@@ -63,7 +66,7 @@ const navLinks = [...sectionLinks, { href: '/cv', label: 'CV' }];
           href={link.href}
           class="rounded-md px-2 py-2.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-zinc-900"
         >
-          {link.label}
+          <I18nText es={link.es} en={link.en} />
         </a>
       ))
     }

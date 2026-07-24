@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import ProjectCard from './ProjectCard.astro';
+import I18nText from './I18nText.astro';
 
 // Para agregar un proyecto nuevo: copiá un archivo de src/content/projects/*.md
 // y completá el frontmatter. No hace falta tocar este componente.
@@ -14,8 +15,12 @@ const projects = allProjects.sort((a, b) => {
 
 <section id="proyectos" class="mx-auto max-w-5xl px-6 py-20">
   <div data-reveal class="mb-12 text-center">
-    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">Proyectos</h2>
-    <p class="mt-3 text-zinc-600 dark:text-zinc-400">Algunas cosas que construí, del backend a la automatización.</p>
+    <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">
+      <I18nText es="Proyectos" en="Projects" />
+    </h2>
+    <p class="mt-3 text-zinc-600 dark:text-zinc-400">
+      <I18nText es="Algunas cosas que construí, del backend a la automatización." en="Some things I've built, from backend to automation." />
+    </p>
   </div>
 
   <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

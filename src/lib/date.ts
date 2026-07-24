@@ -1,4 +1,9 @@
-const MONTHS = [
+export interface Bilingual {
+  es: string;
+  en: string;
+}
+
+const MONTHS_ES = [
   'enero',
   'febrero',
   'marzo',
@@ -13,16 +18,36 @@ const MONTHS = [
   'diciembre',
 ];
 
-/** Formatea una fecha "YYYY-MM" como "Mes YYYY" (ej: "2024-03" -> "marzo 2024"). */
-export function formatMonthYear(value: string): string {
+const MONTHS_EN = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
+
+/** Formatea una fecha "YYYY-MM" como "Mes YYYY" en los dos idiomas. */
+export function formatMonthYear(value: string): Bilingual {
   const [year, month] = value.split('-').map(Number);
-  const monthName = MONTHS[(month ?? 1) - 1] ?? '';
-  return `${monthName} ${year}`;
+  return {
+    es: `${MONTHS_ES[(month ?? 1) - 1] ?? ''} ${year}`,
+    en: `${MONTHS_EN[(month ?? 1) - 1] ?? ''} ${year}`,
+  };
 }
 
-/** Arma el rango "inicio — fin" para experiencia/educación. Sin endDate = "Presente". */
-export function formatDateRange(startDate: string, endDate?: string): string {
+/** Arma el rango "inicio — fin" para experiencia/educación. Sin endDate = "Presente"/"Present". */
+export function formatDateRange(startDate: string, endDate?: string): Bilingual {
   const start = formatMonthYear(startDate);
-  const end = endDate ? formatMonthYear(endDate) : 'Presente';
-  return `${start} — ${end}`;
+  const end = endDate ? formatMonthYear(endDate) : { es: 'Presente', en: 'Present' };
+  return {
+    es: `${start.es} — ${end.es}`,
+    en: `${start.en} — ${end.en}`,
+  };
 }
