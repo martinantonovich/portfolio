@@ -39,7 +39,7 @@ const { title, description } = Astro.props;
       })();
     </script>
 
-    <!-- Idem para el idioma: español por defecto salvo que ya se haya elegido inglés antes. -->
+    <!-- lo mismo para español por defecto salvo que ya se haya elegido inglés antes. -->
     <script is:inline>
       (function () {
         const lang = localStorage.getItem('lang') === 'en' ? 'en' : 'es';

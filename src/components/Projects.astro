@@ -3,8 +3,8 @@ import { getCollection } from 'astro:content';
 import ProjectCard from './ProjectCard.astro';
 import I18nText from './I18nText.astro';
 
-// Para agregar un proyecto nuevo: copiá un archivo de src/content/projects/*.md
-// y completá el frontmatter. No hace falta tocar este componente.
+// Para agregar un proyecto nuevo: 
+// Tengo que copiar un archivo de src/content/projects/*.md y completar el frontmatter.
 const allProjects = await getCollection('projects');
 
 const projects = allProjects.sort((a, b) => {

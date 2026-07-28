@@ -5,8 +5,6 @@ import I18nText from './I18nText.astro';
 import { site } from '../data/site';
 
 // Las anclas (#proyectos, etc.) solo funcionan sin recargar en la home.
-// Si estamos en otra página (ej: /cv), hay que anteponer "/" para que
-// primero navegue de vuelta a la home y después salte a la sección.
 const isHome = Astro.url.pathname === '/';
 const sectionLinks = [
   { href: '#proyectos', es: 'Proyectos', en: 'Projects' },

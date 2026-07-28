@@ -3,8 +3,8 @@ import { getCollection } from 'astro:content';
 import EducationItem from './EducationItem.astro';
 import I18nText from './I18nText.astro';
 
-// Para agregar un estudio/curso/certificación nuevo: copiá un archivo de
-// src/content/education/*.md y completá el frontmatter.
+// Para agregar un estudio/curso/certificación nuevo: 
+// tengo que copiar un archivo desrc/content/education/*.md y completar el frontmatter
 const allEducation = await getCollection('education');
 const education = allEducation.sort((a, b) => b.data.startDate.localeCompare(a.data.startDate));
 ---

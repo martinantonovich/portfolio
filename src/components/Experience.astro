@@ -3,8 +3,8 @@ import { getCollection } from 'astro:content';
 import ExperienceItem from './ExperienceItem.astro';
 import I18nText from './I18nText.astro';
 
-// Para agregar una experiencia nueva: copiá un archivo de src/content/experience/*.md
-// y completá el frontmatter. Se ordena automáticamente por fecha de inicio (más reciente primero).
+// Para agregar una experiencia nueva: 
+// Tengo que copiar un archivo de src/content/experience/*.mdy completar el frontmatter.
 const allExperience = await getCollection('experience');
 const experiences = allExperience.sort((a, b) => b.data.startDate.localeCompare(a.data.startDate));
 ---

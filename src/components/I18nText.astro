@@ -1,8 +1,4 @@
 ---
-// Renderiza ambos idiomas siempre (para no depender de re-render del server)
-// y muestra uno solo vía CSS con el variant "en:" — ver global.css y
-// LanguageToggle.astro. Siempre usa <span> (inline) para que funcione sin
-// importar qué elemento lo contenga (li, p, h2, etc.).
 interface Props {
   es: string;
   en: string;

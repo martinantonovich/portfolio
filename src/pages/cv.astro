@@ -6,9 +6,9 @@ import { skillCategories, languages } from '../data/skills';
 import { formatDateRange } from '../lib/date';
 import I18nText from '../components/I18nText.astro';
 
-// Esta página reusa las mismas content collections que el home (Experiencia
-// y Estudios): agregar/editar un archivo en src/content/ actualiza las dos
-// vistas a la vez. Para actualizar Skills/Idiomas, editá src/data/skills.ts.
+// Reuso las mismas content collections que el home (Experiencia
+// y Estudios): agregar/editar un archivo en src/content/ actualiza las dos vistas a la vez.
+
 const experience = (await getCollection('experience')).sort((a, b) =>
   b.data.startDate.localeCompare(a.data.startDate)
 );
