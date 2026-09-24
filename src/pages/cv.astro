@@ -3,12 +3,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
 import { site } from '../data/site';
 import { skillCategories, languages } from '../data/skills';
-import { formatDateRange } from '../lib/date';
+import { formatDateRange, formatMonthYear } from '../lib/date';
 import I18nText from '../components/I18nText.astro';
 
-// Reuso las mismas content collections que el home (Experiencia
-// y Estudios): agregar/editar un archivo en src/content/ actualiza las dos vistas a la vez.
+// Reuso las mismas content collections que el home (Proyectos, Experiencia
+// y Estudios): agregar/editar un archivo en src/content/ actualiza todas las vistas a la vez.
 
+const projects = (await getCollection('projects')).sort((a, b) => {
+  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+  return (b.data.date ?? '').localeCompare(a.data.date ?? '');
+});
 const experience = (await getCollection('experience')).sort((a, b) =>
   b.data.startDate.localeCompare(a.data.startDate)
 );
@@ -21,53 +25,75 @@ const email = site.email.replace('mailto:', '');
 
 <BaseLayout title={`CV — ${site.name}`} description={`Currículum de ${site.name}, ${site.role}.`}>
   <div class="mx-auto max-w-3xl px-6 py-16">
-    <div class="no-print mb-8 flex justify-end">
+    <div class="no-print mb-8 flex flex-wrap justify-end gap-3">
       <button
-        id="print-cv"
+        id="print-cv-es"
         type="button"
+        data-print-lang="es"
         class="rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-500"
       >
-        <I18nText es="Descargar / Imprimir PDF" en="Download / Print PDF" />
+        Descargar PDF (Español)
+      </button>
+      <button
+        id="print-cv-en"
+        type="button"
+        data-print-lang="en"
+        class="rounded-full border border-emerald-600 px-5 py-2.5 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-400/10"
+      >
+        Download PDF (English)
       </button>
     </div>
 
     <!-- Encabezado -->
-    <div class="cv-block mb-10 border-b border-zinc-200 pb-8 dark:border-zinc-800">
-      <h1 class="font-heading text-3xl font-bold">{site.name}</h1>
-      <p class="mt-1 text-lg text-emerald-600 dark:text-emerald-400">
-        <I18nText es={site.role} en={site.roleEn} />
-      </p>
-      <p class="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
-        {site.location} ·{' '}
-        <a href={`mailto:${email}`} class="hover:text-emerald-600 dark:hover:text-emerald-400">
-          {email}
-        </a>
-        {
-          site.social
-            .filter((s) => s.icon !== 'email')
-            .map((s) => (
-              <>
-                {' '}
-                ·{' '}
-                <a href={s.url} target="_blank" rel="noopener noreferrer" class="hover:text-emerald-600 dark:hover:text-emerald-400">
-                  {s.label}
-                </a>
-              </>
-            ))
-        }
-      </p>
-      {
-        site.resumeUrl && (
-          <a href={site.resumeUrl} class="no-print mt-3 inline-block text-sm text-zinc-500 underline decoration-zinc-300 hover:text-emerald-600 dark:text-zinc-400 dark:decoration-zinc-700">
-            <I18nText es="Descargar el PDF original →" en="Download the original PDF →" />
+    <div class="cv-block mb-10 flex flex-wrap items-center gap-6 border-b border-zinc-200 pb-8 dark:border-zinc-800">
+      <img
+        src={site.avatar}
+        alt={site.name}
+        width="112"
+        height="112"
+        class="size-24 shrink-0 rounded-full object-cover ring-4 ring-white dark:ring-zinc-900"
+      />
+      <div class="min-w-0 flex-1">
+        <h1 class="font-heading text-3xl font-bold">{site.name}</h1>
+        <p class="mt-1 text-lg text-emerald-600 dark:text-emerald-400">
+          <I18nText es={site.role} en={site.roleEn} />
+        </p>
+        <p class="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
+          {site.location} ·{' '}
+          <a href={site.phoneUrl} class="hover:text-emerald-600 dark:hover:text-emerald-400">
+            {site.phone}
+          </a>{' '}
+          ·{' '}
+          <a href={`mailto:${email}`} class="hover:text-emerald-600 dark:hover:text-emerald-400">
+            {email}
           </a>
-        )
-      }
+          {
+            site.social
+              .filter((s) => s.icon !== 'email')
+              .map((s) => (
+                <>
+                  {' '}
+                  ·{' '}
+                  <a href={s.url} target="_blank" rel="noopener noreferrer" class="hover:text-emerald-600 dark:hover:text-emerald-400">
+                    {s.label}
+                  </a>
+                </>
+              ))
+          }
+        </p>
+        {
+          site.resumeUrl && (
+            <a href={site.resumeUrl} class="no-print mt-3 inline-block text-sm text-zinc-500 underline decoration-zinc-300 hover:text-emerald-600 dark:text-zinc-400 dark:decoration-zinc-700">
+              <I18nText es="Descargar el PDF original →" en="Download the original PDF →" />
+            </a>
+          )
+        }
+      </div>
     </div>
 
     <!-- Sobre mí -->
     <section class="cv-block mb-10">
-      <h2 class="font-heading text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-50">
         <I18nText es="Sobre mí" en="About me" />
       </h2>
       <p class="mt-3 whitespace-pre-line text-sm text-zinc-600 dark:text-zinc-400">
@@ -77,7 +103,7 @@ const email = site.email.replace('mailto:', '');
 
     <!-- Habilidades -->
     <section class="cv-block mb-10">
-      <h2 class="font-heading text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-50">
         <I18nText es="Habilidades" en="Skills" />
       </h2>
       <dl class="mt-4 space-y-3">
@@ -96,9 +122,63 @@ const email = site.email.replace('mailto:', '');
       </dl>
     </section>
 
+    <!-- Proyectos -->
+    <section class="cv-block mb-10">
+      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-50">
+        <I18nText es="Proyectos" en="Projects" />
+      </h2>
+      <div class="mt-4 space-y-5">
+        {
+          projects.map((entry) => {
+            const d = entry.data;
+            return (
+              <div class="cv-block">
+                <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
+                  <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+                    <I18nText es={d.title} en={d.titleEn ?? d.title} />
+                    {d.featured && (
+                      <span class="ml-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                        <I18nText es="(destacado)" en="(featured)" />
+                      </span>
+                    )}
+                  </h3>
+                  {d.date && (
+                    <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400">
+                      <I18nText es={formatMonthYear(d.date).es} en={formatMonthYear(d.date).en} />
+                    </span>
+                  )}
+                </div>
+                <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                  <I18nText es={d.description} en={d.descriptionEn ?? d.description} />
+                </p>
+                <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-500">
+                  <I18nText es={d.tags.join(' · ')} en={(d.tagsEn ?? d.tags).join(' · ')} />
+                </p>
+                {(d.repoUrl || d.demoUrl) && (
+                  <p class="mt-1 text-sm">
+                    {d.repoUrl && (
+                      <a href={d.repoUrl} target="_blank" rel="noopener noreferrer" class="font-semibold text-zinc-600 hover:text-emerald-600 dark:text-zinc-300 dark:hover:text-emerald-400">
+                        {d.repoUrl.replace(/^https?:\/\//, '')}
+                      </a>
+                    )}
+                    {d.repoUrl && d.demoUrl && ' · '}
+                    {d.demoUrl && (
+                      <a href={d.demoUrl} target="_blank" rel="noopener noreferrer" class="font-semibold text-zinc-600 hover:text-emerald-600 dark:text-zinc-300 dark:hover:text-emerald-400">
+                        {d.demoUrl.replace(/^https?:\/\//, '')}
+                      </a>
+                    )}
+                  </p>
+                )}
+              </div>
+            );
+          })
+        }
+      </div>
+    </section>
+
     <!-- Experiencia -->
     <section class="cv-block mb-10">
-      <h2 class="font-heading text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-50">
         <I18nText es="Experiencia" en="Experience" />
       </h2>
       <div class="mt-4 space-y-6">
@@ -118,6 +198,11 @@ const email = site.email.replace('mailto:', '');
                     <I18nText es={dateRange.es} en={dateRange.en} />
                   </span>
                 </div>
+                {d.url && (
+                  <a href={d.url} target="_blank" rel="noopener noreferrer" class="text-xs font-semibold text-zinc-500 hover:text-emerald-600 dark:text-zinc-400 dark:hover:text-emerald-400">
+                    {d.url.replace(/^https?:\/\//, '')}
+                  </a>
+                )}
                 {d.bullets.length > 0 && (
                   <ul class="mt-1 list-disc space-y-1 pl-5 text-sm text-zinc-600 marker:text-emerald-500 dark:text-zinc-400">
                     {d.bullets.map((bullet, i) => (
@@ -126,6 +211,11 @@ const email = site.email.replace('mailto:', '');
                       </li>
                     ))}
                   </ul>
+                )}
+                {d.tags.length > 0 && (
+                  <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-500">
+                    <I18nText es={d.tags.join(' · ')} en={(d.tagsEn ?? d.tags).join(' · ')} />
+                  </p>
                 )}
               </div>
             );
@@ -136,7 +226,7 @@ const email = site.email.replace('mailto:', '');
 
     <!-- Estudios -->
     <section class="cv-block mb-10">
-      <h2 class="font-heading text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-50">
         <I18nText es="Estudios" en="Education" />
       </h2>
       <div class="mt-4 space-y-3">
@@ -166,7 +256,7 @@ const email = site.email.replace('mailto:', '');
 
     <!-- Idiomas -->
     <section class="cv-block">
-      <h2 class="font-heading text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-50">
         <I18nText es="Idiomas" en="Languages" />
       </h2>
       <ul class="mt-4 space-y-1">
@@ -186,5 +276,25 @@ const email = site.email.replace('mailto:', '');
 </BaseLayout>
 
 <script>
-  document.getElementById('print-cv')?.addEventListener('click', () => window.print());
+  // Los dos botones fuerzan el idioma del <html> antes de imprimir (sin
+  // importar el toggle ES/EN actual) y lo restauran al cerrar el diálogo,
+  // para no pisar la preferencia de idioma del visitante.
+  document.querySelectorAll<HTMLButtonElement>('[data-print-lang]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const html = document.documentElement;
+      const previousLang = html.getAttribute('data-lang') ?? 'es';
+      const printLang = button.dataset.printLang as 'es' | 'en';
+
+      const restore = () => {
+        html.setAttribute('data-lang', previousLang);
+        html.lang = previousLang;
+        window.removeEventListener('afterprint', restore);
+      };
+
+      html.setAttribute('data-lang', printLang);
+      html.lang = printLang;
+      window.addEventListener('afterprint', restore);
+      window.print();
+    });
+  });
 </script>
