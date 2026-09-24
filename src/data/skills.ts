@@ -19,24 +19,29 @@ export const skillCategories: SkillCategory[] = [
   {
     category: 'Frontend',
     categoryEn: 'Frontend',
-    items: ['React', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'Vue.js', 'Angular.js', 'HTML5', 'CSS'],
+    items: ['React', 'Next.js', 'React Native / Expo', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'Vue.js', 'Angular', 'HTML5', 'CSS'],
   },
   {
     category: 'Backend & APIs',
     categoryEn: 'Backend & APIs',
-    items: ['Spring Boot', 'Java', 'Python', 'APIs REST'],
-    itemsEn: ['Spring Boot', 'Java', 'Python', 'REST APIs'],
+    items: ['Spring Boot', 'Java', 'Python', 'Django', 'Flask', 'Node.js / Express', 'APIs REST'],
+    itemsEn: ['Spring Boot', 'Java', 'Python', 'Django', 'Flask', 'Node.js / Express', 'REST APIs'],
   },
   {
     category: 'Bases de datos',
     categoryEn: 'Databases',
-    items: ['PostgreSQL', 'MySQL', 'ORM', 'SQL avanzado'],
-    itemsEn: ['PostgreSQL', 'MySQL', 'ORM', 'Advanced SQL'],
+    items: ['PostgreSQL', 'MySQL', 'Supabase', 'ORM', 'SQL avanzado'],
+    itemsEn: ['PostgreSQL', 'MySQL', 'Supabase', 'ORM', 'Advanced SQL'],
   },
   {
     category: 'Herramientas & DevOps',
     categoryEn: 'Tools & DevOps',
-    items: ['NVIDIA Omniverse (Digital Twin)', 'n8n', 'Docker', 'CI/CD', 'Git', 'Vercel', 'Railway'],
+    items: ['NVIDIA Omniverse (Digital Twin)', 'n8n', 'Docker', 'CI/CD', 'Git', 'Vercel', 'Railway', 'Android Studio'],
+  },
+  {
+    category: 'Otros',
+    categoryEn: 'Other',
+    items: ['Excel', 'Canva'],
   },
 ];
 

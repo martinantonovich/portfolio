@@ -23,6 +23,8 @@ continuously exploring emerging technologies like LLMs and digital twins. I thri
 collaborative environments, but I also have the autonomy to lead complex projects end-to-end:
 from system architecture to deployment.`,
   location: 'La Plata, Buenos Aires, Argentina',
+  phone: '+54 9 221 639 7422',
+  phoneUrl: 'tel:+5492216397422',
   email: 'mailto:martin.antonovich@gmail.com',
   avatar: '/images/foto_perfil.png',
   resumeUrl: '/cv/CV_Martin_Antonovich_resume.pdf' as string | null,
