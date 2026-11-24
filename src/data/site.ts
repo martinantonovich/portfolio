@@ -23,7 +23,7 @@ end-to-end: from architecture to deployment.`,
   phoneUrl: 'tel:+5492216397422',
   email: 'mailto:martin.antonovich@gmail.com',
   avatar: '/images/foto_perfil.png',
-  resumeUrl: '/cv/CV_Martin_Antonovich_resume.pdf' as string | null,
+  resumeUrl: null as string | null,
   social: [
     { label: 'GitHub', url: 'https://github.com/martinantonovich', icon: 'github' },
     { label: 'LinkedIn', url: 'https://www.linkedin.com/in/antonovichmartin/', icon: 'linkedin' },

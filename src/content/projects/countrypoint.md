@@ -8,5 +8,4 @@ image: "/images/projects/countrypoint.svg"
 demoUrl: "https://countrypoint.com.ar"
 featured: true
 date: "2026-03"
-cvOrder: 2
 ---

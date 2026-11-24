@@ -9,5 +9,4 @@ repoUrl: "https://github.com/martinantonovich/portfolio"
 demoUrl: "https://portfolio.martin-antonovich.workers.dev/"
 featured: true
 date: "2026-07"
-cvOrder: 5
 ---

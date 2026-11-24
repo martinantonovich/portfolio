@@ -8,5 +8,4 @@ image: "/images/projects/Recuerdos.svg"
 demoUrl: "https://recuerdos-theta.vercel.app/"
 featured: false
 date: "2026-08"
-cvOrder: 6
 ---

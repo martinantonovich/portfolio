@@ -1,30 +1,16 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getCollection } from 'astro:content';
+import { getProjects, getExperience, getEducation } from '../lib/content';
 import { site } from '../data/site';
 import { skillCategories, languages } from '../data/skills';
 import { formatDateRange, formatMonthYear } from '../lib/date';
 import I18nText from '../components/I18nText.astro';
 
-// Reuso las mismas content collections que el home (Proyectos, Experiencia
-// y Estudios): agregar/editar un archivo en src/content/ actualiza todas las vistas a la vez.
-// Proyectos y Experiencia usan acá una selección/orden curados para el CV
-// (campo `cvOrder` en el frontmatter), distinto del orden del home: el CV
-// es un resumen, no el catálogo completo. Un proyecto sin `cvOrder` no
-// aparece en el CV; una experiencia sin `cvOrder` cae al final por fecha.
-
-const projects = (await getCollection('projects'))
-  .filter((entry) => entry.data.cvOrder != null)
-  .sort((a, b) => (a.data.cvOrder ?? 0) - (b.data.cvOrder ?? 0));
-const experience = (await getCollection('experience')).sort((a, b) => {
-  if (a.data.cvOrder != null && b.data.cvOrder != null) return a.data.cvOrder - b.data.cvOrder;
-  if (a.data.cvOrder != null) return -1;
-  if (b.data.cvOrder != null) return 1;
-  return b.data.startDate.localeCompare(a.data.startDate);
-});
-const education = (await getCollection('education')).sort((a, b) =>
-  b.data.startDate.localeCompare(a.data.startDate)
-);
+// Mismas funciones que usa el home: cualquier proyecto, experiencia o
+// estudio que se agregue, edite o borre en src/content/ aparece igual acá.
+const projects = await getProjects();
+const experience = await getExperience();
+const education = await getEducation();
 
 const email = site.email.replace('mailto:', '');
 ---
@@ -222,8 +208,8 @@ const email = site.email.replace('mailto:', '');
             const titleEs = `${d.role} · ${d.company}`;
             const titleEn = `${d.roleEn ?? d.role} · ${d.companyEn ?? d.company}`;
             const dateRange = formatDateRange(d.startDate, d.endDate);
-            const bullets = d.cvBullets ?? d.bullets;
-            const bulletsEn = d.cvBullets ? (d.cvBulletsEn ?? d.cvBullets) : d.bulletsEn;
+            const bullets = d.bullets;
+            const bulletsEn = d.bulletsEn;
             return (
               <div class="cv-block">
                 <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
@@ -248,7 +234,7 @@ const email = site.email.replace('mailto:', '');
                     ))}
                   </ul>
                 )}
-                {!d.cvBullets && d.tags.length > 0 && (
+                {d.tags.length > 0 && (
                   <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-500">
                     <I18nText es={d.tags.join(' · ')} en={(d.tagsEn ?? d.tags).join(' · ')} />
                   </p>

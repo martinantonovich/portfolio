@@ -8,5 +8,4 @@ image: "/images/projects/escribania-sureda-sistema.svg"
 demoUrl: "https://escribaniasureda.com.ar"
 featured: true
 date: "2026-04"
-cvOrder: 1
 ---

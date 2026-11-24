@@ -12,5 +12,4 @@ bullets:
 bulletsEn:
   - "Managed condominium/building administration."
   - "Provided customer service within the real estate sector."
-cvOrder: 4
 ---

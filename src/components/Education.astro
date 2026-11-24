@@ -1,12 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
+import { getEducation } from '../lib/content';
 import EducationItem from './EducationItem.astro';
 import I18nText from './I18nText.astro';
 
 // Para agregar un estudio/curso/certificación nuevo: 
 // tengo que copiar un archivo desrc/content/education/*.md y completar el frontmatter
-const allEducation = await getCollection('education');
-const education = allEducation.sort((a, b) => b.data.startDate.localeCompare(a.data.startDate));
+const education = await getEducation();
 ---
 
 <section id="estudios" class="bg-zinc-100/60 py-20 dark:bg-zinc-900/40">

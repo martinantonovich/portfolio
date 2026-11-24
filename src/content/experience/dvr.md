@@ -11,5 +11,4 @@ bullets:
 bulletsEn:
   - "Managed and maintained the organization's IT systems."
   - "Ran the organization's social media presence."
-cvOrder: 5
 ---

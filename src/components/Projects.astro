@@ -1,16 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
+import { getProjects } from '../lib/content';
 import ProjectCard from './ProjectCard.astro';
 import I18nText from './I18nText.astro';
 
 // Para agregar un proyecto nuevo: 
 // Tengo que copiar un archivo de src/content/projects/*.md y completar el frontmatter.
-const allProjects = await getCollection('projects');
-
-const projects = allProjects.sort((a, b) => {
-  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
-  return (b.data.date ?? '').localeCompare(a.data.date ?? '');
-});
+const projects = await getProjects();
 ---
 
 <section id="proyectos" class="mx-auto max-w-5xl px-6 py-20">

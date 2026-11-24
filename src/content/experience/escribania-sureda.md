@@ -13,5 +13,4 @@ bulletsEn:
   - "Built a comprehensive management application and an automated protocol system end-to-end."
   - "Designed a reactive user interface and defined the firm's brand identity."
   - "Managed the full project lifecycle, from architecture to deployment."
-cvOrder: 1
 ---

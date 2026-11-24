@@ -13,5 +13,4 @@ bulletsEn:
   - "Leveraged artificial intelligence for image recognition systems in projects for industry-leading companies such as Johnson & Johnson, Takeda, Edwards, and Alcon."
   - "Trained and labeled data with YOLO."
   - "Integrated LLMs to process and analyze complex health data."
-cvOrder: 2
 ---

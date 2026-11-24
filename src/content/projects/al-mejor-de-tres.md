@@ -8,5 +8,4 @@ image: "/images/projects/al-mejor-de-tres.svg"
 demoUrl: "https://almejorde3.com"
 featured: false
 date: "2026-08"
-cvOrder: 4
 ---

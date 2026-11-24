@@ -8,5 +8,4 @@ image: "/images/projects/aic-consultora.svg"
 demoUrl: "https://aic-consultora.pages.dev"
 featured: false
 date: "2026-10"
-cvOrder: 3
 ---
