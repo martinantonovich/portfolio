@@ -5,7 +5,8 @@ description: "App multiplataforma (web, iOS y Android) para anotar resultados de
 descriptionEn: "Multiplatform app (web, iOS, and Android) for logging padel and tennis match results, with individual and pair head-to-head history. Built with Expo Router and Supabase (Postgres + Auth)."
 tags: ["Expo", "React Native", "TypeScript", "Supabase"]
 image: "/images/projects/al-mejor-de-tres.svg"
-demoUrl: "https://al-mejor-de-tres.vercel.app"
+demoUrl: "https://almejorde3.com"
 featured: false
 date: "2026-08"
+cvOrder: 4
 ---

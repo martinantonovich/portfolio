@@ -21,6 +21,9 @@ const projects = defineCollection({
     featured: z.boolean().default(false),
     // Fecha aproximada (YYYY-MM) usada solo para ordenar, no se muestra.
     date: z.string().optional(),
+    // Orden y presencia en la lista curada de /cv (más corta que el grid del
+    // home): si se omite, el proyecto no aparece en el CV. Menor = primero.
+    cvOrder: z.number().optional(),
   }),
 });
 
@@ -46,6 +49,12 @@ const experience = defineCollection({
     bulletsEn: z.array(z.string()).optional(),
     // Sitio en vivo del proyecto/empresa, si lo tiene (ej: escribaniasureda.com.ar).
     url: z.url().optional(),
+    // Orden en /cv (por defecto se ordena por startDate). Menor = primero.
+    cvOrder: z.number().optional(),
+    // Bullets alternativos usados solo en /cv, para reencuadrar el rol sin
+    // tocar cómo se ve en el timeline del home (ver Delice La Plata).
+    cvBullets: z.array(z.string()).optional(),
+    cvBulletsEn: z.array(z.string()).optional(),
   }),
 });
 

@@ -5,6 +5,8 @@ description: "Catálogo personal para registrar una colección de llaveros de di
 descriptionEn: "Personal catalog for tracking a collection of keychains from different countries, with photos and details for each piece. Express backend with image uploads to Vercel Blob."
 tags: ["Node.js", "Express", "Vercel Blob"]
 image: "/images/projects/Recuerdos.svg"
+demoUrl: "https://recuerdos-theta.vercel.app/"
 featured: false
 date: "2026-08"
+cvOrder: 6
 ---

@@ -10,6 +10,10 @@
    tema. Ver LanguageToggle.astro. */
 @custom-variant en (&:where([data-lang="en"], [data-lang="en"] *));
 
+/* Versión resumida del CV para imprimir (ver botones "PDF resumido" en
+   /cv): recorta y compacta contenido para que entre en 2 carillas. */
+@custom-variant compact (&:where([data-cv-density="compact"], [data-cv-density="compact"] *));
+
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-heading: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;

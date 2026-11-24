@@ -2,8 +2,7 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  // Cambiar por el dominio real cuando lo tenga (se usa para SEO/sitemap).
-  site: 'https://tu-dominio.com',
+  site: 'https://portfolio.martin-antonovich.workers.dev',
   vite: {
     plugins: [tailwindcss()],
   },

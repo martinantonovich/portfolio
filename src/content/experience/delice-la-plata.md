@@ -12,4 +12,9 @@ bullets:
 bulletsEn:
   - "Founded and managed a tea business, handling nationwide import, wholesale, and retail sales."
   - "Built the brand's website with Next.js and React, including an order flow, shipping calculation, and a Supabase-backed customer database."
+cvOrder: 3
+cvBullets:
+  - "Atención al cliente y relaciones públicas de la marca: gestión de pedidos, envíos y postventa con clientes mayoristas y minoristas a nivel nacional."
+cvBulletsEn:
+  - "Handled customer service and public relations for the brand: managing orders, shipping, and after-sales support for wholesale and retail customers nationwide."
 ---

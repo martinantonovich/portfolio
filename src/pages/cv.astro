@@ -8,14 +8,20 @@ import I18nText from '../components/I18nText.astro';
 
 // Reuso las mismas content collections que el home (Proyectos, Experiencia
 // y Estudios): agregar/editar un archivo en src/content/ actualiza todas las vistas a la vez.
+// Proyectos y Experiencia usan acá una selección/orden curados para el CV
+// (campo `cvOrder` en el frontmatter), distinto del orden del home: el CV
+// es un resumen, no el catálogo completo. Un proyecto sin `cvOrder` no
+// aparece en el CV; una experiencia sin `cvOrder` cae al final por fecha.
 
-const projects = (await getCollection('projects')).sort((a, b) => {
-  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
-  return (b.data.date ?? '').localeCompare(a.data.date ?? '');
+const projects = (await getCollection('projects'))
+  .filter((entry) => entry.data.cvOrder != null)
+  .sort((a, b) => (a.data.cvOrder ?? 0) - (b.data.cvOrder ?? 0));
+const experience = (await getCollection('experience')).sort((a, b) => {
+  if (a.data.cvOrder != null && b.data.cvOrder != null) return a.data.cvOrder - b.data.cvOrder;
+  if (a.data.cvOrder != null) return -1;
+  if (b.data.cvOrder != null) return 1;
+  return b.data.startDate.localeCompare(a.data.startDate);
 });
-const experience = (await getCollection('experience')).sort((a, b) =>
-  b.data.startDate.localeCompare(a.data.startDate)
-);
 const education = (await getCollection('education')).sort((a, b) =>
   b.data.startDate.localeCompare(a.data.startDate)
 );
@@ -25,40 +31,61 @@ const email = site.email.replace('mailto:', '');
 
 <BaseLayout title={`CV — ${site.name}`} description={`Currículum de ${site.name}, ${site.role}.`}>
   <div class="mx-auto max-w-3xl px-6 py-16">
-    <div class="no-print mb-8 flex flex-wrap justify-end gap-3">
-      <button
-        id="print-cv-es"
-        type="button"
-        data-print-lang="es"
-        class="rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-500"
-      >
-        Descargar PDF (Español)
-      </button>
-      <button
-        id="print-cv-en"
-        type="button"
-        data-print-lang="en"
-        class="rounded-full border border-emerald-600 px-5 py-2.5 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-400/10"
-      >
-        Download PDF (English)
-      </button>
+    <div class="no-print mb-8 flex flex-col items-end gap-3">
+      <div class="flex flex-wrap justify-end gap-3">
+        <button
+          type="button"
+          data-print-lang="es"
+          data-print-density="full"
+          class="rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-500"
+        >
+          Descargar PDF (Español)
+        </button>
+        <button
+          type="button"
+          data-print-lang="en"
+          data-print-density="full"
+          class="rounded-full border border-emerald-600 px-5 py-2.5 text-sm font-semibold text-emerald-700 transition-colors hover:bg-emerald-50 dark:text-emerald-400 dark:hover:bg-emerald-400/10"
+        >
+          Download PDF (English)
+        </button>
+      </div>
+      <div class="flex flex-wrap items-center justify-end gap-3">
+        <span class="text-xs text-zinc-500 dark:text-zinc-400">Resumido (2 carillas):</span>
+        <button
+          type="button"
+          data-print-lang="es"
+          data-print-density="compact"
+          class="rounded-full border border-zinc-300 px-4 py-2 text-xs font-semibold text-zinc-600 transition-colors hover:border-emerald-500 hover:text-emerald-600 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-emerald-400 dark:hover:text-emerald-400"
+        >
+          PDF (Español)
+        </button>
+        <button
+          type="button"
+          data-print-lang="en"
+          data-print-density="compact"
+          class="rounded-full border border-zinc-300 px-4 py-2 text-xs font-semibold text-zinc-600 transition-colors hover:border-emerald-500 hover:text-emerald-600 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-emerald-400 dark:hover:text-emerald-400"
+        >
+          PDF (English)
+        </button>
+      </div>
     </div>
 
     <!-- Encabezado -->
-    <div class="cv-block mb-10 flex flex-wrap items-center gap-6 border-b border-zinc-200 pb-8 dark:border-zinc-800">
+    <div class="cv-block mb-10 flex flex-wrap items-center gap-6 border-b border-zinc-200 pb-8 print:mb-5 print:gap-4 print:pb-4 dark:border-zinc-800">
       <img
         src={site.avatar}
         alt={site.name}
         width="112"
         height="112"
-        class="size-24 shrink-0 rounded-full object-cover ring-4 ring-white dark:ring-zinc-900"
+        class="size-24 shrink-0 rounded-full object-cover ring-4 ring-white compact:size-16 dark:ring-zinc-900"
       />
       <div class="min-w-0 flex-1">
-        <h1 class="font-heading text-3xl font-bold">{site.name}</h1>
-        <p class="mt-1 text-lg text-emerald-600 dark:text-emerald-400">
+        <h1 class="font-heading text-3xl font-bold compact:text-2xl">{site.name}</h1>
+        <p class="mt-1 text-lg text-emerald-600 compact:text-base dark:text-emerald-400">
           <I18nText es={site.role} en={site.roleEn} />
         </p>
-        <p class="mt-3 text-sm text-zinc-600 dark:text-zinc-400">
+        <p class="mt-3 text-sm print:text-xs text-zinc-600 dark:text-zinc-400">
           {site.location} ·{' '}
           <a href={site.phoneUrl} class="hover:text-emerald-600 dark:hover:text-emerald-400">
             {site.phone}
@@ -92,28 +119,28 @@ const email = site.email.replace('mailto:', '');
     </div>
 
     <!-- Sobre mí -->
-    <section class="cv-block mb-10">
-      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-50">
+    <section class="mb-10 print:mb-5">
+      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 compact:text-base dark:border-zinc-800 dark:text-zinc-50">
         <I18nText es="Sobre mí" en="About me" />
       </h2>
-      <p class="mt-3 whitespace-pre-line text-sm text-zinc-600 dark:text-zinc-400">
+      <p class="mt-3 whitespace-pre-line text-sm print:text-xs text-zinc-600 dark:text-zinc-400">
         <I18nText es={site.bio} en={site.bioEn} />
       </p>
     </section>
 
     <!-- Habilidades -->
-    <section class="cv-block mb-10">
-      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-50">
+    <section class="mb-10 print:mb-5">
+      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 compact:text-base dark:border-zinc-800 dark:text-zinc-50">
         <I18nText es="Habilidades" en="Skills" />
       </h2>
-      <dl class="mt-4 space-y-3">
+      <dl class="mt-4 space-y-3 print:mt-2 print:space-y-1.5">
         {
           skillCategories.map((group) => (
             <div class="grid grid-cols-1 gap-1 sm:grid-cols-[9rem_1fr] sm:gap-3">
-              <dt class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+              <dt class="text-sm print:text-xs font-semibold text-zinc-700 compact:text-xs dark:text-zinc-300">
                 <I18nText es={group.category} en={group.categoryEn} />
               </dt>
-              <dd class="text-sm text-zinc-600 dark:text-zinc-400">
+              <dd class="text-sm print:text-xs text-zinc-600 compact:text-xs dark:text-zinc-400">
                 <I18nText es={group.items.join(', ')} en={(group.itemsEn ?? group.items).join(', ')} />
               </dd>
             </div>
@@ -123,18 +150,18 @@ const email = site.email.replace('mailto:', '');
     </section>
 
     <!-- Proyectos -->
-    <section class="cv-block mb-10">
-      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-50">
+    <section class="mb-10 print:mb-5">
+      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 compact:text-base dark:border-zinc-800 dark:text-zinc-50">
         <I18nText es="Proyectos" en="Projects" />
       </h2>
-      <div class="mt-4 space-y-5">
+      <div class="mt-4 space-y-5 print:mt-2 print:space-y-3">
         {
           projects.map((entry) => {
             const d = entry.data;
             return (
               <div class="cv-block">
                 <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
-                  <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+                  <h3 class="text-sm print:text-xs font-semibold text-zinc-800 dark:text-zinc-200">
                     <I18nText es={d.title} en={d.titleEn ?? d.title} />
                     {d.featured && (
                       <span class="ml-1.5 text-xs font-medium text-emerald-600 dark:text-emerald-400">
@@ -148,50 +175,59 @@ const email = site.email.replace('mailto:', '');
                     </span>
                   )}
                 </div>
-                <p class="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+                <p class="mt-1 text-sm print:text-xs text-zinc-600 dark:text-zinc-400">
                   <I18nText es={d.description} en={d.descriptionEn ?? d.description} />
                 </p>
-                <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-500">
+                <p class="mt-1 flex flex-wrap items-baseline gap-x-1.5 text-xs text-zinc-500 dark:text-zinc-500">
                   <I18nText es={d.tags.join(' · ')} en={(d.tagsEn ?? d.tags).join(' · ')} />
+                  {(d.repoUrl || d.demoUrl) && (
+                    <span class="font-semibold text-zinc-600 dark:text-zinc-300">
+                      ·{' '}
+                      {d.repoUrl && (
+                        <a href={d.repoUrl} target="_blank" rel="noopener noreferrer" class="hover:text-emerald-600 dark:hover:text-emerald-400">
+                          {d.repoUrl.replace(/^https?:\/\//, '')}
+                        </a>
+                      )}
+                      {d.repoUrl && d.demoUrl && ' · '}
+                      {d.demoUrl && (
+                        <a href={d.demoUrl} target="_blank" rel="noopener noreferrer" class="hover:text-emerald-600 dark:hover:text-emerald-400">
+                          {d.demoUrl.replace(/^https?:\/\//, '')}
+                        </a>
+                      )}
+                    </span>
+                  )}
                 </p>
-                {(d.repoUrl || d.demoUrl) && (
-                  <p class="mt-1 text-sm">
-                    {d.repoUrl && (
-                      <a href={d.repoUrl} target="_blank" rel="noopener noreferrer" class="font-semibold text-zinc-600 hover:text-emerald-600 dark:text-zinc-300 dark:hover:text-emerald-400">
-                        {d.repoUrl.replace(/^https?:\/\//, '')}
-                      </a>
-                    )}
-                    {d.repoUrl && d.demoUrl && ' · '}
-                    {d.demoUrl && (
-                      <a href={d.demoUrl} target="_blank" rel="noopener noreferrer" class="font-semibold text-zinc-600 hover:text-emerald-600 dark:text-zinc-300 dark:hover:text-emerald-400">
-                        {d.demoUrl.replace(/^https?:\/\//, '')}
-                      </a>
-                    )}
-                  </p>
-                )}
               </div>
             );
           })
         }
       </div>
+      <p class="mt-3 hidden text-xs text-zinc-500 compact:mt-1 compact:block dark:text-zinc-500">
+        <I18nText
+          es={`Más proyectos en ${site.social.find((s) => s.icon === 'github')?.url.replace(/^https?:\/\//, '')}`}
+          en={`More projects at ${site.social.find((s) => s.icon === 'github')?.url.replace(/^https?:\/\//, '')}`}
+        />
+      </p>
     </section>
 
     <!-- Experiencia -->
-    <section class="cv-block mb-10">
-      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-50">
+    <section class="mb-10 print:mb-5">
+      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 compact:text-base dark:border-zinc-800 dark:text-zinc-50">
         <I18nText es="Experiencia" en="Experience" />
       </h2>
-      <div class="mt-4 space-y-6">
+      <div class="mt-4 space-y-6 print:mt-2 print:space-y-3">
         {
           experience.map((entry) => {
             const d = entry.data;
             const titleEs = `${d.role} · ${d.company}`;
             const titleEn = `${d.roleEn ?? d.role} · ${d.companyEn ?? d.company}`;
             const dateRange = formatDateRange(d.startDate, d.endDate);
+            const bullets = d.cvBullets ?? d.bullets;
+            const bulletsEn = d.cvBullets ? (d.cvBulletsEn ?? d.cvBullets) : d.bulletsEn;
             return (
               <div class="cv-block">
                 <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
-                  <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+                  <h3 class="text-sm print:text-xs font-semibold text-zinc-800 dark:text-zinc-200">
                     <I18nText es={titleEs} en={titleEn} />
                   </h3>
                   <span class="text-xs font-medium text-emerald-600 dark:text-emerald-400">
@@ -203,16 +239,16 @@ const email = site.email.replace('mailto:', '');
                     {d.url.replace(/^https?:\/\//, '')}
                   </a>
                 )}
-                {d.bullets.length > 0 && (
-                  <ul class="mt-1 list-disc space-y-1 pl-5 text-sm text-zinc-600 marker:text-emerald-500 dark:text-zinc-400">
-                    {d.bullets.map((bullet, i) => (
+                {bullets.length > 0 && (
+                  <ul class="mt-1 list-disc space-y-1 pl-5 text-sm print:text-xs text-zinc-600 marker:text-emerald-500 dark:text-zinc-400">
+                    {bullets.map((bullet, i) => (
                       <li>
-                        <I18nText es={bullet} en={d.bulletsEn?.[i] ?? bullet} />
+                        <I18nText es={bullet} en={bulletsEn?.[i] ?? bullet} />
                       </li>
                     ))}
                   </ul>
                 )}
-                {d.tags.length > 0 && (
+                {!d.cvBullets && d.tags.length > 0 && (
                   <p class="mt-1 text-xs text-zinc-500 dark:text-zinc-500">
                     <I18nText es={d.tags.join(' · ')} en={(d.tagsEn ?? d.tags).join(' · ')} />
                   </p>
@@ -225,11 +261,11 @@ const email = site.email.replace('mailto:', '');
     </section>
 
     <!-- Estudios -->
-    <section class="cv-block mb-10">
-      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-50">
+    <section class="mb-10 print:mb-5">
+      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 compact:text-base dark:border-zinc-800 dark:text-zinc-50">
         <I18nText es="Estudios" en="Education" />
       </h2>
-      <div class="mt-4 space-y-3">
+      <div class="mt-4 space-y-3 print:mt-2 print:space-y-1.5">
         {
           education.map((entry) => {
             const d = entry.data;
@@ -237,7 +273,7 @@ const email = site.email.replace('mailto:', '');
             return (
               <div class="cv-block flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5">
                 <div>
-                  <h3 class="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+                  <h3 class="text-sm print:text-xs font-semibold text-zinc-800 dark:text-zinc-200">
                     <I18nText es={d.title} en={d.titleEn ?? d.title} />
                   </h3>
                   <p class="text-xs text-zinc-500 dark:text-zinc-500">
@@ -255,14 +291,14 @@ const email = site.email.replace('mailto:', '');
     </section>
 
     <!-- Idiomas -->
-    <section class="cv-block">
-      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 dark:border-zinc-800 dark:text-zinc-50">
+    <section>
+      <h2 class="border-b border-zinc-200 pb-2 font-heading text-xl font-semibold text-zinc-900 compact:text-base dark:border-zinc-800 dark:text-zinc-50">
         <I18nText es="Idiomas" en="Languages" />
       </h2>
-      <ul class="mt-4 space-y-1">
+      <ul class="mt-4 space-y-1 print:mt-2">
         {
           languages.map((lang) => (
-            <li class="text-sm text-zinc-600 dark:text-zinc-400">
+            <li class="text-sm print:text-xs text-zinc-600 dark:text-zinc-400">
               <span class="font-semibold text-zinc-800 dark:text-zinc-200">
                 <I18nText es={`${lang.name}:`} en={`${lang.nameEn}:`} />
               </span>{' '}
@@ -276,23 +312,27 @@ const email = site.email.replace('mailto:', '');
 </BaseLayout>
 
 <script>
-  // Los dos botones fuerzan el idioma del <html> antes de imprimir (sin
-  // importar el toggle ES/EN actual) y lo restauran al cerrar el diálogo,
-  // para no pisar la preferencia de idioma del visitante.
+  // Los botones fuerzan el idioma y la densidad (completo/resumido) del
+  // <html> antes de imprimir, sin importar el toggle ES/EN actual, y los
+  // restauran al cerrar el diálogo para no pisar la preferencia del visitante.
   document.querySelectorAll<HTMLButtonElement>('[data-print-lang]').forEach((button) => {
     button.addEventListener('click', () => {
       const html = document.documentElement;
       const previousLang = html.getAttribute('data-lang') ?? 'es';
+      const previousDensity = html.getAttribute('data-cv-density') ?? 'full';
       const printLang = button.dataset.printLang as 'es' | 'en';
+      const printDensity = button.dataset.printDensity as 'full' | 'compact';
 
       const restore = () => {
         html.setAttribute('data-lang', previousLang);
         html.lang = previousLang;
+        html.setAttribute('data-cv-density', previousDensity);
         window.removeEventListener('afterprint', restore);
       };
 
       html.setAttribute('data-lang', printLang);
       html.lang = printLang;
+      html.setAttribute('data-cv-density', printDensity);
       window.addEventListener('afterprint', restore);
       window.print();
     });
